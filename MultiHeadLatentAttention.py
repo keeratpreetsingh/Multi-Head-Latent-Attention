@@ -6,28 +6,32 @@ class multiheadlatentattention(nn.Module):
         self.d_out=d_out
         self.num_head=num_head
         self.dl=dl
-        self.d_head=d_out//num_head
+        self.head_dim=d_out//num_head
         self.dropout=nn.Dropout(dropout_rate)
-        self.w_key=nn.Linear(d_in,d_out)
-        self.w_kl=nn.Linear(d_out,self.dl)
-        self.w_query=nn.Linear(d_in,d_out)
-        self.w_value=nn.Linear(d_in,d_out)
-        self.w_vl=nn.Linear(d_out,self.dl)
-        self.w_up_k = nn.ModuleList([nn.Linear(dl, self.d_head) for i in range(num_head)])
-        self.w_up_v = nn.ModuleList([nn.Linear(dl, self.d_head) for i in range(num_head)])
+        self.w_kv=nn.Linear(d_in,dl)
+        self.w_ku=nn.Linear(dl,d_out//2)
+        self.w_kr=nn.Linear(d_in,d_out//2)
+        self.w_vu=nn.Linear(dl,d_out)
+        self.w_query=nn.Linear(d_in,dl)
+        self.w_qu=nn.Linear(dl,d_out//2)
+        self.w_qr=nn.Linear(dl,d_out//2)
+        self.rope=Rope(contextlenght,d_out//2)
         self.register_buffer("mask",torch.tril(torch.ones(contextlenght,contextlenght)))
         self.w_out=nn.Linear(d_out,d_out)
     def forward(self,x):
         b,num_token,d_in=x.shape
-        key=self.w_kl(self.w_key(x))
+        ckv=self.w_kv(x)
+        key=self.w_ku(ckv)
+        key_r=self.rope(self.w_kr(x))
+        key=torch.concat([key,key_r],dim=-1)
         query=self.w_query(x)
-        value=self.w_vl(self.w_value(x))
-        k_heads = [self.w_up_k[h](key).view(b, num_token, 1, self.d_head) for h in range(self.num_head)]
-        v_heads = [self.w_up_v[h](value).view(b, num_token, 1, self.d_head) for h in range(self.num_head)]
-        key = torch.cat(k_heads, dim=2)  
-        value = torch.cat(v_heads, dim=2)
-        query=query.view(b,num_token,self.num_head,self.d_head)
-        
+        query_u=self.w_qu(query)
+        query_r=self.rope(self.w_qr(query))
+        query=torch.concat([query_u,query_r],dim=-1)
+        value=self.w_vu(ckv)
+        key=key.view(b,num_token,self.num_head,self.head_dim)
+        query=query.view(b,num_token,self.num_head,self.head_dim)
+        value=value.view(b,num_token,self.num_head,self.head_dim)
         key=key.transpose(1,2)
         query=query.transpose(1,2)
         value=value.transpose(1,2)
@@ -36,6 +40,6 @@ class multiheadlatentattention(nn.Module):
         at=torch.softmax(at/key.shape[-1]**0.5,dim=-1)
         at=self.dropout(at)
         at_score=((at@value).transpose(1,2)).contiguous()
-        at_score=at_score.view(b,num_token,self.d_out)
         at_score=self.w_out(at_score)
+        at_score=at_score.view(b,num_token,self.d_out)
         return at_score
