@@ -19,7 +19,7 @@ class Rope(nn.Module):
         x_rotate=torch.zeros_like(x_)
         x_rotate[...,0]=x_[...,0]*cos - x_[...,1]*sin
         x_rotate[...,1]=x_[...,0]*sin + x_[...,1]*cos
-        x_rotate=x.view(b,s,d)
+        x_rotate=x_rotate.view(b,s,d)
         return x_rotate
 
 
@@ -63,7 +63,8 @@ class multiheadlatentattention(nn.Module):
         at=torch.softmax(at/key.shape[-1]**0.5,dim=-1)
         at=self.dropout(at)
         at_score=((at@value).transpose(1,2)).contiguous()
-        at_score=self.w_out(at_score)
         at_score=at_score.view(b,num_token,self.d_out)
+        at_score=self.w_out(at_score)
         return at_score
+
 
