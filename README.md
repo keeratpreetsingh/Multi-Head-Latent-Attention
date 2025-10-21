@@ -54,7 +54,7 @@ It aims to demonstrate how latent projections can improve efficiency and context
 Encodes token positions as rotations:
 ### 2 Multi-Head Latent Attention (multiheadlatentattention)
 Implements the full latent attention mechanism:
-⚙️ Forward Pass Summary
+### Forward Pass Summary
 Input projection:
 Inputs are mapped to latent query/key/value vectors.
 
@@ -70,7 +70,7 @@ Scaled dot-product attention with dropout and causal masking.
 Output projection:
 Concatenated head outputs → final linear projection.
 
-Example Usage
+####Example Usage
 python
 Copy code
 import torch
@@ -89,7 +89,7 @@ attn = multiheadlatentattention(
 
 out = attn(x)
 print(out.shape)  # (2, 128, 512)
-#Research Reference
+##Research Reference
 This implementation is based on:
 
 DeepSeek-V3: Towards Efficient Latent-Attention Large Language Models
