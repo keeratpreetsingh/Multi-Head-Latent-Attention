@@ -5,7 +5,7 @@
 [![DeepSeek](https://img.shields.io/badge/Inspired_by-DeepSeekV3-black?logo=openai)](https://github.com/deepseek-ai)
 
 ###  Author
-**Implementation by:** [Keerat Singh (Keeratking22)](https://github.com/Keeratking22)  
+**Implementation by:** [Keeratpreet Singh](https://github.com/Keeratpreetsingh)  
 **Concept originally from:** [DeepSeek-V3 Research Paper (2025)](https://github.com/deepseek-ai)  
 **Framework:** PyTorch  
 **Language:** Python  
