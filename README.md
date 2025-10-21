@@ -6,10 +6,15 @@
 
 ###  Author
 **Implementation by:** [Keeratpreet Singh](https://github.com/Keeratpreetsingh) 
+
 **Background:** Self-taught 16-year-old developer passionate about AI systems, LLMs, and efficient neural architectures.
+
 **Concept originally from:** [DeepSeek-V3 Research Paper (2025)](https://github.com/deepseek-ai)  
+
 **Framework:** PyTorch  
+
 **Language:** Python  
+
 
 ---
 
