@@ -129,4 +129,4 @@ Copy code
 ## License
 This repository is released under the MIT License.
 Original architecture © DeepSeek AI Research.
-Implementation © 2025 Keeratpreet Singh.
+Implementation © 2025 Keeratpreetsingh.
