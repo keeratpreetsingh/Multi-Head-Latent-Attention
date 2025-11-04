@@ -120,7 +120,7 @@ Copy code
   author = {Keeratpreet Singh},
   title = {Multi-Head Latent Attention (PyTorch Implementation of DeepSeek-V3 Mechanism)},
   year = {2025},
-  url = {https://github.com/Keeratpreetsingh}
+  url = {https://github.com/keeratpreetsingh}
 }
 💡 Contact
 📧 keeratpreetsingh2@gmail.com
